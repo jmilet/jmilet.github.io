@@ -12,7 +12,7 @@ in the stuff I have to write about.
 But here it is. Many thanks to my good friend [Rai][Rai] who tirelessly
 teaches me lots of nice stuff about emacs, Lisp, Git, etc. and pushes me to publicly write about programming.
 
-This blog will actually be a way to document the proves of concept that I usually lost so don't expect
+This blog will actually be a way to document the proves of concept that I usually lose so don't expect
 to much magic, just simple notes about any programming language, but focusing on Erlang and Elixir.
 
 I hope it is interesting...
