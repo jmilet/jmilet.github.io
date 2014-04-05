@@ -71,6 +71,7 @@ a:visited { color: #a0a; }
 .title {
   display: inline-block;
   margin-bottom: 2em;
+  font-size: 150%;
 }
 
 .title a {
