@@ -21,7 +21,7 @@ It focuses in many practical aspects of the language. There you will find an exa
 OTP (the library that implements most of the distributed, scalable and fault tolerant magic) like server and
 how to use Mnesia (the distributed database that comes with the language).
 
-And finally, to master the language and its librarys:
+And finally, to master the language and its libraries:
 
 * [Erlang and OTP in Action][erlang_and_otp_in_action]
 
