@@ -17,7 +17,7 @@ After that the next step could be to read one of the Erlang's author's book:
 
 * [Software for a Concurrent World][software_for_a_concurrent_world]
 
-It focuses in many practical aspects of the language. There you will find an example of how to implement an
+It focuses on many practical aspects of the language. There you will find an example of how to implement an
 OTP (the library that implements most of the distributed, scalable and fault tolerant magic) like server and
 how to use Mnesia (the distributed database that comes with the language).
 
