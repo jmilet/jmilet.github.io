@@ -5,7 +5,7 @@ date:   2014-04-05 11:15:14
 categories: programming erlang elixir
 ---
 
-If you are interesting in learning Erlang or Elixir the first thing you have to do,
+If you are interested in learning Erlang or Elixir the first thing you have to do,
 other than install the software, obviously, is go and read this on-line book:
 
 * [Learn Yourself Some Erlang for Great Good][learn_yourserf_some_erlang]
@@ -26,7 +26,7 @@ And finally, to master the language and its libraries:
 * [Erlang and OTP in Action][erlang_and_otp_in_action]
 
 To acuatlly take advantage of this book you need some knowledge of Erlang. It explains
-from the ground up a highly scalable distributed system.
+how to build from the ground up a highly scalable distributed system.
 
 If you want to take full adantatge of your commute time you can subscribe to these podcasts:
 
