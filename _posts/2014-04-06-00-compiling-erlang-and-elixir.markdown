@@ -6,7 +6,7 @@ categories: erlang elixir programming
 ---
 
 This is a simple guide to download and install Erlang and Elixir in your computer. I won't go
-into to much detail because if you're reading this it's clear you're familiar with the UNIX shell.
+into too much detail because if you're reading this it's clear you're familiar with the UNIX shell.
 
 **These instructions are here in the hope that they will be useful, but without any warranty.**
 
