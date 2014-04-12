@@ -26,7 +26,7 @@ the trunk is an application behaviour, the branches are supervisor behaviours,
 and the leafs are generic server behaviours. As in any tree, from a branch grows
 another branch so we could have supervisors of supervisors of supervisors...
 
-In each level [application, supervisor, gen_server] we find the required public interface
+At each level [application, supervisor, gen_server] we find the required public interface
 to start or stop the behaviour (or any other operation the behaviour is able to
 deal with). It results in branches that are able to be stoped or started independly.
 
@@ -44,10 +44,10 @@ application
               +-> gen_server
 {% endhighlight bash %}
 
-OTP behaviours allways follow the same patters. Firstly, a public interface
+OTP behaviours always follow the same patterns. Firstly, a public interface
 to manage different operations: start, stop, calls, etc. Secondly, a hidden core
-that manage the behaviours's commom logic and finally a set of callbacks that
-implement the specific aspects of the problem in hand.
+that manage the behaviours's commom logic and finally a set of callback functions
+that implement the specific aspects of the problem at hand.
 
 {% highlight bash %}
 client -> public interface -> OTP logic -> callbacks -> OTP logic -> client
