@@ -1,0 +1,293 @@
+---
+layout: post
+title:  "OTP Tour - Feeds - Day 1"
+date:   2014-04-11 21:28:00
+categories: erlang otp
+---
+
+I would like to start a serie of posts related to the [OTP][OTP] library. OTP
+stands for Open Telecom Platform. It consists of a library designed to
+solve highly concurrent and distributed problems.
+
+OTP is a powerful tool but it takes some time to get used to it. Actually, it
+isn't that hard to deal with it, but some previous kwnoledge is requerided in order
+not to get disappointed.
+
+OTP is structured in behaviours which can be seen as interfaces in other
+languages. OTP comes with several ones and new others can be implemented
+by the user. We'll focuse on these ones:
+
+* Application
+* Supervisor
+* Generic Server
+
+The best way to think about an OTP application is as a tree structure where
+the trunk is an application behaviour, the branches are supervisor behaviours,
+and the leafs are generic server behaviours. As in any tree, from a branch grows
+another branch so we could have supervisors of supervisors of supervisors...
+
+In each level [application, supervisor, gen_server] we find the required public interface
+to start or stop the behaviour (or any other operation the behaviour is able to
+deal with). It results in branches that are able to be stoped or started independly.
+
+{% highlight bash %}
+application
+     |
+     +--> supervisor
+     |        +-> gen_server
+     |        +-> gen_server
+     |        +-> gen_server
+     |
+     +--> supervisor
+              +-> gen_server
+              +-> gen_server
+              +-> gen_server
+{% endhighlight bash %}
+
+OTP behaviours allways follow the same patters. Firstly, a public interface
+to manage different operations: start, stop, calls, etc. Secondly, a hidden core
+that manage the behaviours's commom logic and finally a set of callbacks that
+implement the specific aspects of the problem in hand.
+
+{% highlight bash %}
+client -> public interface -> OTP logic -> callbacks -> OTP logic -> client
+{% endhighlight %}
+
+Remember this logic, it'll be repeated again and again.
+
+## Our toy app
+In order to undertand what an OTP application is we're going to develop,
+slowly, but firmly, a tiny feed application than we'll use from the command
+line, but which could also be used from a mobile app. It'll be a basic REST server
+to subscribe, unsubscribe and closely follow all or favourite feeds.
+
+## The directories structure
+We need a directory structure like this:
+{% highlight bash %}
+feeds
+  +-- doc
+  +-- ebin
+  +-- include
+  +-- priv
+  +-- src
+{% endhighlight %}
+
+Then meaning is obvious so I won't describe it.
+
+## This post's goal
+In this post we don't want to achieve a very ambitious goal so this simple structure
+will be fine for us.
+
+{% highlight bash %}
+application
+     |
+     +--> supervisor
+              +--> gen_server
+{% endhighlight bash %}
+
+Let's go.
+
+## The application behaviour
+Let's start with the application behaviour. We'll need two files:
+
+* feeds/src/feeds.erl    The behaviour's implementation.
+* feeds/ebin/feeds.app   A declarative specification of the applicaction.
+
+The application specification file looks like this:
+
+{% highlight erlang %}
+%% feeds/ebin/feeds.app
+
+{application, feeds,
+   [{description, "Minimal feeds service"},   %% Literal description of our app
+    {vsn, "0.1.0"},                           %% Version
+    {modules, [feeds]},                       %% Modules our app is composed of
+    {resitered, []},                          %% Registerd processes. This is necessary
+                                              %% in order to let the system detect
+                                              %% registered names clashes
+    {applications, [kernel, stdlib]},         %% Applications our app depends on
+    {mod, {feeds, []}}                        %% Our main's application module and
+                                              %% an empty list of parameters
+                                              %% (in this case)
+]}.
+{% endhighlight %}
+
+The implementation of the behaviour application is this:
+
+{% highlight erlang %}
+%% feeds/src/feeds.erl
+
+-module(feeds).
+-behaviour(application).
+-export([start/2, stop/1]).
+
+%% Public interface
+start(_Type, _StartArgs) ->
+    io:format("Starting feeds server...~n"),
+    feeds_sup:start_link().
+
+stop(_State) ->
+    io:format("Stopping feeds server...~n"),
+    ok.
+{% endhighlight %}
+
+Quite simple. Just a public interface with two functions, one to
+start the application another one to stop it. The start function
+starts the feeds\_sup supervisor via its public interface (the
+start_link() function). We put text traces in order to follow how
+the process is going.
+
+## The supervisor behaviour
+Supervisors are in charge of workers. They define some restart
+strategies like if a worker dies all of them die, or if a 
+worker dies it's automatically started, etc. Even it can handle
+how to cope with dying/starting loops. Superivors can be nested
+as deeply as needed, no limit exists.
+
+Our supervisor looks like this.
+
+{% highlight erlang %}
+%% feeds/src/feeds_sup.erl
+
+-module(feeds_sup).
+-behaviour(supervisor).
+-export([start_link/0, init/1]).
+
+%% Public interface
+start_link() ->
+    io:format("Starting feeds_sup...~n", []),
+    supervisor:start_link(?MODULE, []).
+
+%% Callbacks
+init(_Args) ->
+    io:format("Initating feeds_sup...~n", []),
+    {ok, {restart_strategy(), workers()}}.
+
+%% Private
+restart_strategy() ->
+    %% How the workers should be restarted.
+    {one_for_one, 1, 60}.
+
+workers() ->
+    %% List of supervised workers.
+    [worker_spec()].
+
+worker_spec() ->
+    %% How workers should be managed.
+
+    {chfeeds,                       %% A name for our worker spec.
+     {feeds_gen, start_link, []},   %% The module, function and params of our workers.
+                                    %% Worker's execution entry point.
+     transient,                     %% How the worker should be restarted.
+                                    %% transient means restart only if it abnormally
+                                    %% terminated.
+     3000,                          %% Milliseconds to wait for worker's shutdown.
+                                    %% After that time the supervisor will abruptly
+                                    %% terminate it.
+     worker,                        %% Defines a subordinate process type, a worker
+                                    %% in this case, but it could has been another
+                                    %% supervisor.
+     [feeds_sup]}.                  %% One element list with the worker's module.
+{% endhighlight %}
+
+Not too much work in exchange of quite a lot of power.
+
+## The generic server behaviour
+We're close to have our basic OTP application up and running.
+By now you problably have guessed what the next step is. Right, yet another
+start public interface and callback function.
+
+{% highlight erlang %}
+%% feeds/src/feeds_gen.erl
+
+-module(feeds_gen).
+-behaviuour(gen_server).
+-export([start_link/0, init/1]).
+
+%% Public interface
+start_link() ->
+    io:format("Starting feeds_gen...~n", []),
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+%% Callbacks
+init(_Args) ->
+    io:format("Initating feeds_gen...~n", []),
+    {ok, {}}.
+{% endhighlight %}
+
+Let's compile the app.
+
+## The makefile
+The easiest way to compile and run your Erlang shell is via
+a makefile.
+
+{% highlight makefile %}
+# feeds/makefile
+
+all: compile run
+
+compile:
+        erlc -o ebin src/*.erl
+
+run:
+        erl -pa ebin
+{% endhighlight %}
+
+Be carefull, makefiles require tabs (no spaces)
+in the rules.
+
+## Running our app
+For short the explanation will be shown as a session shell.
+
+{% highlight erlang %}
+$ make
+erlc -o ebin src/*.erl
+erl -pa ebin
+Erlang/OTP 17 [RELEASE CANDIDATE 2] [erts-6.0] [source] [smp:2:2] [async-threads:10] [hipe] [kernel-poll:false]
+
+Eshell V6.0  (abort with ^G)
+1> %% Start the app
+1> application:start(feeds).
+Starting feeds server...
+Starting feeds_sup...
+Initating feeds_sup...
+Starting feeds_gen...
+Initating feeds_gen...
+ok
+2> %% Is our application out there?
+2> application:which_applications().
+[{feeds,"Minimal feeds service","0.1.0"},
+ {stdlib,"ERTS  CXC 138 10","2.0"},
+ {kernel,"ERTS  CXC 138 10","3.0"}]
+3> %% Stop the app
+3> application:stop(feeds).
+Stopping feeds server...
+ok
+4>
+=INFO REPORT==== 12-Apr-2014::09:01:50 ===
+    application: feeds
+    exited: stopped
+    type: temporary
+{% endhighlight %}
+
+That's it. We have covered the basic structure of an OTP application.
+It's only necessary to remember a few things:
+
+* A directory structure.
+* The application, supervisor [[supervisor]] and worker tree.
+* Each branch of the tree can be started/stoped independendly.
+* Client calls public api, which calls the OTP core, which calls private behaviour's callbacks,
+which in turn return values to the OTP core which send them to the client.
+
+The last point may seem confusing but all it means is that each behaviours's structure has
+some gaps you have to fill in [the public interface, callbacks functions].
+
+We'll build some functionallity on top of this. Clone the git repository.
+
+{% highlight bash %}
+git clone https://github.com/jmilet/feeds.git
+{% endhighlight %}
+
+Have fun.
+
+[OTP]: http://learnyousomeerlang.com/what-is-otp
