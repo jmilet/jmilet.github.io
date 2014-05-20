@@ -255,7 +255,7 @@ Starting node rabbit@debmac ...
 $
 {% endhighlight %}
 
-Final thoughts. Exchanges are the tool that allows that a producer
+Final thoughts. Exchanges are the tool that allow that a producer
 can be decoupled from the queues, while queues are connected to
 exchanges.
 
