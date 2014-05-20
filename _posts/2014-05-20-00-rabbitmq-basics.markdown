@@ -6,7 +6,7 @@ categories: erlang rabbitmq
 ---
 
 I should be writing about the second day of the feed's app, but before that
-I would like to document an small prove of concept with RabbitMQ.
+I would like to document an small proof of concept with RabbitMQ.
 
 RabbitMQ is an amazing messaging system writen in Erlang that you
 can access from any language. These are my notes about it. If you
