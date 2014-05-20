@@ -59,7 +59,7 @@ For example, for node 'a'.
 $ erl -name a@192.168.1.36 -setcookie abc
 {% endhighlight bash %}
 
-Note the node name and the cookie. The cookie must match in all the nodes.
+Note the node name and the cookie. The cookie must match in all nodes.
 
 Once the three nodes are running let's create the schema and
 start Mnesia at all of them.
