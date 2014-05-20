@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "RabbitMQ Basics"
-date:   2014-05-05 21:54:00
+date:   2014-05-20 21:54:00
 categories: erlang rabbitmq
 ---
 
