@@ -18,7 +18,7 @@ problems.
 
 ## Installation
 
-Just go to the RabbitMQ Download page and look for the binary tar file.
+Just go to the RabbitMQ download page and look for the binary tar file.
 
 For example:
 
@@ -269,6 +269,45 @@ exchanges.
 ACK's can be automatic or manual, if manual we use channel.basic_ack in
 order to let the server know that we are done with the processing of that
 element.
+
+Exchange's types:
+
+* Default Exchange: Direct exchange with no name. All queues are connected to it, bound
+with a routing key with the same name of the queue.
+* Direct Exchange: Deliver messages routing by key.
+* Fanout Exchange: Deliver messages to all queues independly of the routing key.
+* Topic Exchange: Deliver messages based on routing key and a patter used in
+binding time.
+* Header Exchange: Deliver messages based on message headers.
+
+About Queues:
+
+* Name.
+* Durable (survive a broker restart).
+* Exclusive.
+* Auto-delete.
+* Arguments.
+
+About Exchanges:
+
+* Name.
+* Durable (survive a broker restart).
+* Auto-delete.
+* Arguments.
+
+About Messages:
+
+* Content type.
+* Content encoding.
+* Routing key.
+* Delivery mode (persistent, not persistent).
+* Priority.
+* Publishing timestamp.
+* Expiration period.
+* Publisher application id.
+
+What makes a messages persistent is its own persistent flag, no queue's or exchange's
+durable flag. Message persistence affects performance.
 
 Hopefully in the next few days I will have some spare time to get
 into more detail with an Erlang example.
