@@ -276,7 +276,7 @@ Exchange's types:
 with a routing key with the same name of the queue.
 * Direct Exchange: Deliver messages routing by key.
 * Fanout Exchange: Deliver messages to all queues independly of the routing key.
-* Topic Exchange: Deliver messages based on routing key and a patter used in
+* Topic Exchange: Deliver messages based on routing key and a pattern used in
 binding time.
 * Header Exchange: Deliver messages based on message headers.
 
