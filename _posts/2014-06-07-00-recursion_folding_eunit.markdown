@@ -109,7 +109,7 @@ because the outcome of all this head adding is that the resulting list
 ends up built in reverse order. We could add elements to the tail,
 but it would be inefficient because the whole list would have to
 be traversed to find the last element in each addition. On the
-contrary no search has to be done to find the head of the list.
+contrary no search is required to find the head of the list.
 
 For example:
 
