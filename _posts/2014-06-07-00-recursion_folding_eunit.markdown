@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Recursion, folding and EUnit"
+title:  "Recursion, Folding and EUnit"
 date:   2014-06-07 21:00:00
 categories: erlang EUnit
 ---
