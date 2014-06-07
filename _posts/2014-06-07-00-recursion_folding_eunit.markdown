@@ -117,7 +117,7 @@ The input:
 
     [a, b, c, d]
 
-After being processed by a folding funtion produce the output:
+After being processed by a folding funtion produces the output:
 
       [d | [c | [b | [a]]]] =:= [d, c, b, a]
 
