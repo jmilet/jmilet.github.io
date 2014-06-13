@@ -5,7 +5,7 @@ date:   2014-06-13 20:08:00
 categories: erlang
 ---
 
-I like lazy data structuress, so I was curious about how they could
+I like lazy data structures, so I was curious about how they could
 be implemented in Erlang. Actually, I have found that is quite
 easy. In order to understand how they work only a little understanding
 of functional programming is needed.
