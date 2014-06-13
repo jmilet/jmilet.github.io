@@ -52,7 +52,7 @@ end_of_list
 {% endhighlight %}
 
 Basically, the clue is to keep the state as a tuple with its first
-field being the current value and the second one a function which
+term being the current value and the second one a function which
 encloses the next execution of the generator for the tail. The
 potential for the next execution is retained in this clousure.
 
