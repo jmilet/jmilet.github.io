@@ -1,0 +1,101 @@
+---
+layout: post
+title:  "Laziness"
+date:   2014-06-13 20:08:00
+categories: erlang
+---
+
+I like lazy data structuress, so I was curious about how they could
+be implemented in Erlang. Actually, I have found that is quite
+easy. In order to understand how they work only a little understanding
+of functional programming is needed.
+
+Let's see a basic example.
+
+{% highlight erlang %}
+-module(lazy).
+-export([generator/1, next_val/1, val/1]).
+
+
+generator([H|T]) ->
+    {H, fun() -> generator(T) end};
+generator([]) ->
+    end_of_list.
+
+next_val({_Value, FunctionNext}) ->
+    FunctionNext().
+
+val({Value, _FunctionNext}) ->
+    Value.
+{% endhighlight %}
+
+Let's see it in action.
+
+{% highlight bash %}
+$ erl
+Erlang/OTP 17 [RELEASE CANDIDATE 2] [erts-6.0] [source] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+Eshell V6.0  (abort with ^G)
+1> c(lazy).
+{ok,lazy}
+2> Gen1 = lazy:generator([1, 2, 3]).
+{1,#Fun<lazy.0.84850269>}
+3> lazy:val(Gen1).
+1
+4> Gen2 = lazy:next_val(Gen1).
+{2,#Fun<lazy.0.84850269>}
+5> Gen3 = lazy:next_val(Gen2).
+{3,#Fun<lazy.0.84850269>}
+6> lazy:next_val(Gen3).
+end_of_list
+7>
+{% endhighlight %}
+
+Basically, the clue is to keep the state as a tuple with its first
+field being the current value and the second one a function which
+encloses the next execution of the generator for the tail. The
+potential for the next execution is retained in this clousure.
+
+Another example with infinite values.
+
+{% highlight erlang %}
+-module(lazy2).
+-export([generator/1, next_val/1, val/1]).
+
+
+generator(Val) ->
+    {Val, fun() -> generator(Val + 1) end}.
+
+next_val({_Value, FunctionNext}) ->
+    FunctionNext().
+
+val({Value, _FunctionNext}) ->
+    Value.
+{% endhighlight %}
+
+And its execution.
+
+{% highlight bash %}
+$ erl
+Erlang/OTP 17 [RELEASE CANDIDATE 2] [erts-6.0] [source] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+Eshell V6.0  (abort with ^G)
+1> c(lazy2).
+{ok,lazy2}
+2> Gen1 = lazy2:generator(0).
+{0,#Fun<lazy2.0.2666151>}
+3> lazy2:val(Gen1).
+0
+4> Gen2 = lazy2:next_val(Gen1).
+{1,#Fun<lazy2.0.2666151>}
+5> Gen3 = lazy2:next_val(Gen2).
+{2,#Fun<lazy2.0.2666151>}
+6> Gen4 = lazy2:next_val(Gen3).
+{3,#Fun<lazy2.0.2666151>}
+7>
+{% endhighlight %}
+
+As its title denotes this post has been quite short.
+
+Have fun.
+
