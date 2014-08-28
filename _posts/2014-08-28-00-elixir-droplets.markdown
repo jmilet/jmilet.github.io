@@ -144,6 +144,24 @@ iex(9)> 1..10 |> Enum.filter &(&1 > 2)
 iex(10)>
 ```
 
+# List comprehensions
+
+The **i** index is local in the list comprehension.
+
+```elixir
+iex(1)> i = 100
+100
+iex(2)> b = for i <- 1..200, do: i
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+ 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+ 43, 44, 45, 46, 47, 48, 49, 50, ...]
+iex(3)> Enum.max b
+200
+iex(4)> i
+100
+iex(5)>
+```
+
 # A minimal gen server
 
 Starting a minimal gen server is very easy.
