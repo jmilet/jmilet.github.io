@@ -8,7 +8,7 @@ categories: erlang elixir
 The last 15 days I've been reading
 [Elixir in Action](http://www.manning.com/juric/). This book is
 amazing. I hightly recommend it. The book briefly explores Elixir as a
-language with some Erlang pics. But where it really excels is in its
+language with some Erlang picks. But where it really excels is in its
 OTP's treatment and the patterns for building concurrents
 systems. It's not a beginers book, you need some Erlang and FP
 experience to take full adavantatge of the book.
