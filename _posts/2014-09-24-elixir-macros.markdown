@@ -133,7 +133,9 @@ nil
 iex(5)>
 ```
 
-Let's do it nicer in Elixir using Keyword Lists:
+Note that *code* took the value [do: :ok] so that returned its
+unquoting inside then quoting.  Let's do it nicer using Keyword Lists
+in order to grab the actual code.
 
 ```Elixir
 iex(1)> defmodule MacroTest do
