@@ -6,11 +6,12 @@ categories: erlang elixir elisp
 ---
 
 When I started playing with Elixir's macros some days ago I knew they
-were inspired by Lisp's ones. I always wanted to look at them but I
-found them such an advanced topic that I always ended giving up.
+were inspired by the Lisp's ones. I always wanted to look at the
+latter, but I found them such an advanced topic that I always ended
+giving up.
 
 But this time I did it. I jumped into my scratch Emacs buffer and
-began to apply all I learned about Elixir macros to emacs Lisp. These
+began to apply all I learned about Elixir macros to Emacs Lisp. These
 are my notes explaining how both languages compare in this regard.
 
 As always remember... I'm still learning...
@@ -19,7 +20,7 @@ As always remember... I'm still learning...
 
 Quote allows to transform code into its internal representation more
 formally called
-[Abstract Parse Tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree).
+[Abstract Syntax Tree](http://en.wikipedia.org/wiki/Abstract_syntax_tree).
 
 Note the difference between executing the code and getting its
 internal representation.
@@ -44,9 +45,9 @@ iex(2)> quote do: 1 + 1
 iex(3)>
 ```
 <p>
-# Unquote (back quote)
+# Unquote and Backquote
 
-Unquote (and back quote in Emacs Lisp) allow to inject some actual code
+Unquote and backquote (in Emacs Lisp) allow to inject some actual code
 inside the internal code's representation.
 
 Let's see it.
@@ -133,9 +134,9 @@ nil
 iex(5)>
 ```
 
-Note that *code* took the value [do: :ok] so that returned its
+Note that *code* took the value [do: :ok] so that was returned by its
 unquoting inside then quoting.  Let's do it nicer using Keyword Lists
-in order to grab the actual code.
+in order to grab the actual code in the *code* var.
 
 ```Elixir
 iex(1)> defmodule MacroTest do
@@ -165,13 +166,13 @@ nil
 iex(5)>
 ```
 
-As can be seen macros are a powerful tool that easily allow to extend
+As can be seen macros are a powerful tool that easily allows to extend
 the language. Both languages implement macros in a very similar way
 giving access to the inner code representation and allowing the
 programmer to alter them.
 
-Macros are an open door to the
-[Domain Specific Languages](http://en.wikipedia.org/wiki/Domain-specific_language)
+Macros are an open door to
+[Domain Specific Languages](http://en.wikipedia.org/wiki/Domain-specific_language),
 something that Elixir will excel at very soon.
 
 Have fun.
