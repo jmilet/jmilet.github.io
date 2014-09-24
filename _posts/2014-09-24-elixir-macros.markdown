@@ -72,7 +72,7 @@ iex(1)> x = 20
 20
 iex(2)> quote do: 1 + x
 {:+, [context: Elixir, import: Kernel], [1, {:x, [], Elixir}]}
-iex(3)> Code.eval_quoted quote do: 1 + unquote(20)
+iex(3)> Code.eval_quoted quote do: 1 + unquote(x)
 {21, []}
 iex(4)>
 ```
