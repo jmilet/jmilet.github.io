@@ -68,12 +68,13 @@ In Lisp:
 In Elixir:
 
 ```Elixir
-iex(1)> 1 + 1
-2
-iex(2)> quote do: 1 + 1
-{:+, [context: Elixir, import: Kernel], [1, 1]}
-iex(3)> Code.eval_quoted quote do: 1 + 1
-{2, []}
+iex(1)> x = 20
+20
+iex(2)> quote do: 1 + x
+{:+, [context: Elixir, import: Kernel], [1, {:x, [], Elixir}]}
+iex(3)> Code.eval_quoted quote do: 1 + unquote(20)
+{21, []}
+iex(4)>
 ```
 
 In this example we firstly set *x* to 20. Afterwards, quoting and
