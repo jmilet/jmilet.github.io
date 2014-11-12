@@ -5,7 +5,7 @@ date:   2014-04-04 21:17:14
 categories: jekyll update
 ---
 
-It seems that finally this going to be my programming blog. It's been a very long trip to get here. I wasn't
+It seems that finally this is going to be my programming blog. It's been a very long trip to get here. I wasn't
 sure enough about writing about programming as a consider myself a learner and nobody would be interested
 in the stuff I have to write about.
 
