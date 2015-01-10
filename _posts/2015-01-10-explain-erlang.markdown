@@ -14,7 +14,7 @@ why it's so fun.
 
 Then I came up with this piece of code.
 
-```
+```Erlang
 -module(process_ex).
 
 -export([start/0, run/1, loop/0, pid/0, stop/0]).
@@ -26,18 +26,18 @@ start() ->
 
 loop()->
     receive
-	Any ->
+        Any ->
 	        io:format("Received ~p ....~n", [Any]),
 				        process_ex:loop()
-					    end.
+    end.
 
 run(N) ->
     P = pid(),
 
     for(1, N, fun(I) ->
-    	            P ! I,
-		      	      timer:sleep(1000)
-				      end).
+                    P ! I,
+                    timer:sleep(1000)
+              end).
 
 pid() ->
     global:whereis_name(?PROCESS_NAME).
@@ -47,9 +47,9 @@ stop() ->
 
 for(N, N, F) ->
     F(N);
-    for(I, N, F) ->
-        F(I),
-	    for(I + 1, N, F).
+for(I, N, F) ->
+    F(I),
+    for(I + 1, N, F).
 ```
 
 Why is it interesting?
@@ -93,7 +93,7 @@ Received 3 ...
 <p>
 #Globally register a name to make it independent of its pid
 
-```
+```Erlang
 start() ->
     global:register_name(?PROCESS_NAME, spawn_link(fun() -> loop() end)).
     
@@ -104,7 +104,7 @@ pid() ->
 <p>
 # Make your how "for" with nice recursion
 
-```
+```Erlang
 for(N, N, F) ->
     F(N);
     for(I, N, F) ->
@@ -115,7 +115,7 @@ for(N, N, F) ->
 <p>
 #Cross-VM message passing via API
 
-```
+```Erlang
 run(N) ->
     P = pid(),
 
@@ -125,7 +125,7 @@ run(N) ->
 <p>
 #Remote process control
 
-```
+```Erlang
 stop() ->
     exit(pid(), kill).
 ```
