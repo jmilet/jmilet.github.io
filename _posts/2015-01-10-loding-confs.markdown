@@ -17,7 +17,7 @@ This function...
 file:consult(Filename) -> {ok, Terms} | {error, Reason}
 ```
 
-...receives the file's path a return its content as an Erlang term.
+...receives the file's path and return its content as an Erlang term.
 
 An example:
 
