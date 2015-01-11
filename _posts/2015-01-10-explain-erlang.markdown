@@ -9,8 +9,8 @@ These days I've been reading the second edition of Programming Erlang
 by Joe Armstrong. I highly recommend it.
 
 Looking at the book's examples I thought that it would be a good idea
-to have some code to show to non Erlang programmers what Erlang is and
-why it's so fun.
+to have some code to show to non Erlang programmers what Erlang is
+about and why it's so fun.
 
 Then I came up with this piece of code.
 
