@@ -107,9 +107,9 @@ pid() ->
 ```Erlang
 for(N, N, F) ->
     F(N);
-    for(I, N, F) ->
-        F(I),
-	    for(I + 1, N, F).
+for(I, N, F) ->
+    F(I),
+    for(I + 1, N, F).
 ```
 
 <p>
