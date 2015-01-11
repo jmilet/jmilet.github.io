@@ -1,0 +1,136 @@
+---
+layout: post
+title:  "Gen Event Server"
+date:   2015-01-10 19:15:00
+categories: erlang
+---
+
+I like the observer pattern. I like seeing objects reacting to events,
+so I knew that I'd like the gen_event behaviour. For some reason it
+wasn't obvious to me how this behaviour worked. Today I've played a
+bit with it and found that it's quite easy to understand and use.
+
+Let's see it in action.
+
+```Erlang
+-module(event1).
+
+-behaviour(gen_event).
+
+-export([init/1, handle_event/2, handle_call/2, handle_info/2, code_change/3,
+	 terminate/2]).
+
+init([]) ->
+    io:format("=> event1:init", []),
+    {ok, 1}.
+
+handle_event({uno, Value}, State) ->
+    io:format("uno received value: ~p, called ~p times~n", [Value, State]),
+    {ok, State + 1};
+
+handle_event({dos, Value}, State) ->
+    io:format("dos received value: ~p, called ~p times~n", [Value, State]),
+    {ok, State + 1};
+
+handle_event(Any, State) ->
+    io:format("Any -> ~p, called ~p times~n", [Any, State]),
+    {ok, State + 1}.
+
+handle_call(_, State) ->
+    {ok, ok, State}.
+
+handle_info(_, State) ->
+    {ok, State}.
+
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+terminate(_Reason, _State) ->
+    io:format("=> event1:terminate~n"),
+    ok.
+```
+
+Firstly, we need an event manager. The event manager is just a process
+which has the ability to notify events. Note that to start a manager
+we don't reference our code at all.
+
+```Erlang
+$ erl
+Erlang/OTP 17 [erts-6.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
+[kernel-poll:false]
+
+Eshell V6.1  (abort with ^G)
+1> c(event1).
+{ok,event1}
+2> {ok, Manager} = gen_event:start_link().
+{ok,<0.39.0>}
+```
+
+Now we are going to instantiate an event handler. An event handler is
+a process which listens to the notifications emitted by the
+manager. It's an actual process with its own state. To see how its
+state evolves we'll print how many times the handler it's been called.
+
+```Erlang
+3> gen_event:add_handler(Manager, event1, []).
+=> event1:initok
+4> gen_event:notify(Manager, {uno, 100}).
+uno received value: 100, called 1 times
+ok
+5> gen_event:notify(Manager, {uno, 100}).
+uno received value: 100, called 2 times
+ok
+6> gen_event:notify(Manager, {uno, 100}).
+uno received value: 100, called 3 times
+ok
+```
+
+Now we'll instance a second event handler. Note how they are different
+processes with different state.
+
+```Erlang
+7> gen_event:add_handler(Manager, event1, []).
+=> event1:initok
+8> gen_event:notify(Manager, {uno, 200}).
+uno received value: 200, called 1 times
+uno received value: 200, called 4 times
+ok
+9> gen_event:notify(Manager, {uno, 200}).
+uno received value: 200, called 2 times
+uno received value: 200, called 5 times
+ok
+```
+
+We get two messages because we have two handlers.
+
+Let's list them.
+
+```Erlang
+10> gen_event:which_handlers(Manager).
+[event1,event1]
+```
+
+Let's remove one of them.
+
+```Erlang
+11> gen_event:delete_handler(Manager, event1, []).
+=> event1:terminate
+ok
+12> gen_event:notify(Manager, {uno, 200}).
+uno received value: 200, called 6 times
+ok
+```
+
+And finally, stop the manager.
+
+```Erlang
+13> gen_event:stop(Manager).
+=> event1:terminate
+ok
+14>
+```
+
+That's it.
+
+Have fun.
+
