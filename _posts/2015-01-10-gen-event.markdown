@@ -85,7 +85,7 @@ uno received value: 100, called 3 times
 ok
 ```
 
-Now we'll instance a second event handler. Note how they are different
+Now we'll instance a second event handler. Note that they are different
 processes with different state.
 
 ```Erlang
