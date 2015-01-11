@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Explain what Erlang is"
+title:  "Explain what Erlang is about"
 date:   2015-01-10 19:15:00
 categories: erlang
 ---
