@@ -199,7 +199,7 @@ In the link example the points to note are:
 
 * We have to _trap exits_ in both processes in order to receive EXIT messages.
 * The structure of the received message is different from the monitor one.
-* Abnormally exiting the monitoring process also exits the monitored one (look for "simple_process got 'EXIT'). This demonstrates the bidirectionality.
+* Abnormally exiting the monitoring process also exits the monitored one (look for "simple_process got 'EXIT'"). This demonstrates the bidirectionality.
 <br>
 <br>
 
