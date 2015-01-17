@@ -120,7 +120,7 @@ differ in how it is acomplished.
 	6>
 	```
 
-3. You don't need to ask for notifications
+3. We don't need to ask for notifications
 
 	Unlike links, monitors receive regular Erlang messages by default. The structure is:
 
