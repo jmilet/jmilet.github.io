@@ -1,0 +1,254 @@
+---
+layout: post
+title:  "Finite State Machines with gen_fsm"
+date:   2015-02-01 09:00:00
+categories: erlang
+---
+
+The gen_fsm module let us to define Finite State Machines as Erlang
+processes.
+
+A gen\_fsm process looks a lot like a regular gen\_server, except for
+the fact that the FSM process, in response to an event, returns both
+the well known process state (like any other gen_server) and the next
+state the FSM will transition to.
+
+Not only it's easy to implement FSM's with this module, but also we
+gain the benefit of the transactional properties distinctive of the
+Erlang's processes which perfectly fit in the FSM world.
+
+# A simple FSM
+
+In order to implement our prove of concept we'll define a very simple
+FSM.
+
+```
+	            times = times + 1
+	First state -> Second state -> Third State
+	     ^                            |
+	     |                            |
+	     +----------------------------+
+                       ^
+					   |
+				     reset => times = 0
+					          next state is first_state
+```
+
+1. Our FSM is an infinite loop with three states. The FSM will
+transition to the next state in response to the _next_ event. Reaching
+the third state implies returning to the first one.
+
+2. The process state, the actual data, will be a regular counter named
+_times_ which begins at 0 and increments its value with each
+transition.
+
+3. A _reset_ event brings the FSM to its initial state, that is: First
+   state and times = 0.
+
+
+# The gen_fsm API
+
+The idea is that we can make the FSM transition between states sending
+it events that can (or not) bring data with them. The intersection
+between the current state and the incoming events results in the next
+FSM state and the next data state.
+
+Then gen_fsm behaviour offers two ways of sending these events:
+
+* Synchronous events.
+* Asynchronous events.
+
+And two modes to react to events:
+
+* In the current state.
+* In any state.
+
+The latter is useful for _reset_ or _stop_ kind of events that apply in
+any state.
+
+So the async functions are:
+
+* send\_event(FsmRef, Event) -> ok
+* send\_all\_state_event(FsmRef, Event) -> ok
+
+And the sync ones are:
+
+* sync\_send\_event(FsmRef, Event) -> Reply
+* sync\_send\_event(FsmRef, Event, Timeout) -> Reply
+* sync\_send\_all\_state_event(FsmRef, Event) -> Reply
+* sync\_send\_all\_state_event(FsmRef, Event, Timeout) -> Reply
+
+[Find the whole reference here] (http://erlang.org/doc/man/gen_fsm.html#send_event-2)
+
+# The test's API
+
+Our API is very simple:
+
+```
+start_link(MachineName) => Starts a new FSM named MachineName.
+next(MachineName)       => Makes the FSM asynchronously transition to the next state.
+sync_next(MachineName)  => Makes the FSM synchronously transition to the next state.
+reset(MachineName) ->   => Asynchronously resets the FSM.
+sync_reset(MachineName) => Synchronously reset the FSM.
+```
+
+We use the global registration mode, so our FSM's id can be any
+regular term. Here we've chosen an string.
+
+This is the test module's code. Something to note is that the async
+events delegate on sync events. I'm not sure whether this is quite an
+elegant solution, but works well and keeps the logic in just one
+place.
+
+The test module's code...
+
+```Erlang
+-module(fsm_test).
+
+-behaviour(gen_fsm).
+
+-export([start_link/1]).
+-export([init/1, first_state/2, first_state/3, second_state/3, second_state/2,
+	 third_state/2, third_state/3, handle_event/3,
+	 handle_sync_event/4, handle_info/3, terminate/3, code_change/4]).
+-export([next/1, sync_next/1, reset/1, sync_reset/1]).
+
+-define(SERVER, ?MODULE).
+
+-record(state, {times=0}).
+
+start_link(MachineName) ->
+    gen_fsm:start_link({global, MachineName}, ?MODULE, [], []).
+
+next(MachineName) ->
+    gen_fsm:send_event({global, MachineName}, next).
+
+sync_next(MachineName) ->
+    gen_fsm:sync_send_event({global, MachineName}, next).
+
+reset(MachineName) ->
+    gen_fsm:send_all_state_event({global, MachineName}, reset).
+
+sync_reset(MachineName) ->
+    gen_fsm:sync_send_all_state_event({global, MachineName}, reset).
+
+init([]) ->
+    {ok, first_state, #state{}}.
+
+%-----------------------------------------------------------------------------------
+% Async events.
+%-----------------------------------------------------------------------------------
+first_state(next, #state{times = N} = State) ->
+    io:format("First state...~n"),
+    {next_state, second_state, State#state{times = N + 1}}.
+
+second_state(next, #state{times = N} = State) ->
+    io:format("Second state...~n"),
+    {next_state, third_state, State#state{times = N + 1}}.
+
+third_state(next, #state{times = N} = State) ->
+    io:format("Third state...~n"),
+    {next_state, first_state, State#state{times = N + 1}}.
+
+%-----------------------------------------------------------------------------------
+% Sync events.
+%-----------------------------------------------------------------------------------
+first_state(Event, _From, State) ->
+    {next_state, NextState, NewState} = first_state(Event, State),
+    {reply, NewState#state.times, NextState, NewState}.
+
+second_state(Event, _From, State) ->
+    {next_state, NextState, NewState} = second_state(Event, State),
+    {reply, NewState#state.times, NextState, NewState}.
+
+third_state(Event, _From, State) ->
+    {next_state, NextState, NewState} = third_state(Event, State),
+    {reply, NewState#state.times, NextState, NewState}.
+
+%-----------------------------------------------------------------------------------
+% Async events (All).
+%-----------------------------------------------------------------------------------
+handle_event(reset, _StateName, _State) ->
+    io:format("Async reset...~n"),
+    {next_state, first_state, #state{}}.
+
+%-----------------------------------------------------------------------------------
+% Sync events (All).
+%-----------------------------------------------------------------------------------
+handle_sync_event(reset, _From, _StateName, _State) ->
+    io:format("Sync reset...~n"),
+    {reply, 0, first_state, #state{}}.
+
+%-----------------------------------------------------------------------------------
+% Regular OTP messages.
+%-----------------------------------------------------------------------------------
+handle_info(_Info, StateName, State) ->
+    {next_state, StateName, State}.
+
+terminate(_Reason, _StateName, _State) ->
+    ok.
+
+code_change(_OldVsn, StateName, State, _Extra) ->
+    {ok, StateName, State}.
+```
+
+The module working...
+
+```Erlang
+$ erl
+Erlang/OTP 17 [erts-6.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
+[kernel-poll:false]
+
+Eshell V6.1  (abort with ^G)
+1> c(fsm_test).
+{ok,fsm_test}
+2> fsm_test:start_link("uno").
+{ok,<0.39.0>}
+3> fsm_test:sync_next("uno").
+First state...
+1
+4> fsm_test:sync_next("uno").
+Second state...
+2
+5> fsm_test:sync_next("uno").
+Third state...
+3
+6> fsm_test:sync_next("uno").
+First state...
+4
+7> fsm_test:sync_next("uno").
+Second state...
+5
+8> fsm_test:sync_next("uno").
+Third state...
+6
+9> fsm_test:reset("uno").
+Async reset...
+ok
+10> fsm_test:next("uno").
+First state...
+ok
+11> fsm_test:sync_next("uno").
+Second state...
+2
+12> fsm_test:sync_reset("uno").
+Sync reset...
+0
+13> fsm_test:start_link("dos").
+{ok,<0.51.0>}
+14> fsm_test:sync_next("dos").
+First state...
+1
+15> fsm_test:sync_next("dos").
+Second state...
+2
+16> fsm_test:sync_next("uno").
+First state...
+1
+17>
+```
+
+That's it.
+
+Have fun.
+
