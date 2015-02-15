@@ -75,7 +75,7 @@ Actually, it's quite simple.
 
 **accept_fsm**: The accepting connections process.
 
-**worker_gen**: The reader worker.
+**worker_gen**: The socket reader worker.
 
 <br>
 # main_sup - The main supervisor
