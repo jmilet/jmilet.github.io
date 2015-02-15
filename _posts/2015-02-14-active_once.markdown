@@ -60,8 +60,8 @@ Actually, it's quite simple.
 	    +-----------------------+
         |                       |
 		|                       |
-   listener_sup      +---->  worker_sup
-        |          /            |
+   listener_sup      +---->  worker_sup    (*) The accept process spawns a worker
+        |          /            |              on the accepted socket
 		|        /              |
  (n) accept_fsm          (m) worker_gen
 
