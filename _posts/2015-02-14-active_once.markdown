@@ -430,7 +430,7 @@ process leak.
 
 I'm not quite sure whether this solution has any problem I'm not aware
 of.  I've tried to follow the patters I've learnt reading the Erlang
-and Elixir books that cover the topic. I could have got something
+and Elixir books that cover the topic. I could have gotten something
 wrong so, please, read those books and get accuarate explanations
 about how these things actually work.
 
