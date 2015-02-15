@@ -284,7 +284,8 @@ each read. This way the reading speed will be much lower than the
 writing one, forcing the writer process to stop as the writing buffer
 gets full.
 
-Note how the active_once option is set after each read.
+Note how the active_once option is set after each read and how the
+packet type is set to line.
 
 ```Erlang
 -module(worker_gen).
