@@ -12,7 +12,7 @@ be shared between nodes... Let's test it.
 
 # The test
 
-As asual the test is a very simple one. Just two different physical
+As usual the test is a very simple one. Just two different physical
 machines and a file that will be accessed by both of them.
 
 The first machine is a nice Raspberry Pi running FreeBSD.
@@ -78,7 +78,7 @@ We see that the file actually is a process. Let's make its pid travel
 to the Raspberry.
 
 In the Raspberry we globally register the shell's pid so it can be
-accesed from the remote node.
+accessed from the remote node.
 
 ```bash
 iex(raspberry@192.168.1.38)1> :global.register_name :la_shell, self()
