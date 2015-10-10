@@ -128,11 +128,11 @@ iex(mac@192.168.1.37)6>
 
 Nice.
 
-After seeing that files are processes and stress them quite a bit I'd
-say that files follow processes's semantics when it comes to queuing
-I/O operations. That means that the same file can be shared between
-different processes and its read/write operations will be executed in
-the received order. The file's queue would garantee that.
+After seeing that files are processes and have stressed them quite a
+bit I'd say that files follow processes's semantics when it comes to
+queuing I/O operations. That means that the same file can be shared
+between different processes and its read/write operations will be
+executed in the received order. The file's queue would garantee that.
 
 Please, if you can confirm or correct the last statement I'd love
 to hear from you (see below how to contact me). Thanks!!!
