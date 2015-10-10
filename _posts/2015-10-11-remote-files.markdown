@@ -78,7 +78,7 @@ We see that the file actually is a process. Let's make its pid travel
 to the Raspberry.
 
 In the Raspberry we globally register the shell's pid so it can be
-accessed from the remote node.
+accessed from the Mac.
 
 ```bash
 iex(raspberry@192.168.1.38)1> :global.register_name :la_shell, self()
@@ -94,8 +94,8 @@ iex(mac@192.168.1.37)4> send :global.whereis_name(:la_shell), f
 iex(mac@192.168.1.37)5>
 ```
 
-Again in the Raspberry we catch the file. Note the local pid in the Mac
-and the remote one in the Raspberry.
+Again in the Raspberry we receive the file. Note the local pid in the
+Mac and the remote one in the Raspberry.
 
 ```bash
 iex(raspberry@192.168.1.38)2> f = receive do
@@ -132,7 +132,7 @@ After seeing that files are processes and stress them quite a bit I'd
 say that files follow processes's semantics when it comes to queuing
 I/O operations. That means that the same file can be shared between
 different processes and its read/write operations will be executed in
-order. The file's queue would garantee that.
+the received order. The file's queue would garantee that.
 
 Please, if you can confirm or correct the last statement I'd love
 to hear from you (see below how to contact me). Thanks!!!
