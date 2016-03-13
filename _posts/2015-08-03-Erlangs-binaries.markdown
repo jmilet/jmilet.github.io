@@ -27,7 +27,6 @@ the final one is multiple of 8. If it is, then we say we have a
 Number of bits multiple of 8       =>   binary
 Number of bits non multiple of 8   =>   bitstring
 ```
-<p>
 
 # How they look like?
 
@@ -35,7 +34,7 @@ Binaries are enclosed in <<>>.
 
 For example:
 
-```Erlang
+```erlang
 $ erl
 Erlang/OTP 18 [erts-7.0] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]
@@ -49,7 +48,7 @@ Eshell V7.0  (abort with ^G)
 The same way strings are lists whose elements are printable, binaries
 can also store printable content.
 
-```Erlang
+```erlang
 2> <<"hola">>.
 <<"hola">>
 3> <<65, 66>>.
@@ -59,7 +58,7 @@ can also store printable content.
 
 The value:size syntax allows to set the number of bits of each element.
 
-```Erlang
+```erlang
 4> <<255:1>>.
 <<1:1>>
 5> <<255:2>>.
@@ -77,7 +76,7 @@ Erlang represents the data as a sequence of bytes from left to
 right. The remaining part, in the case of a bitstring, is shown in the
 value:size form.
 
-```Erlang
+```erlang
 9> <<255:1, 0>>.
 <<128,0:1>>
 10>
@@ -95,7 +94,7 @@ Graphically it would be something like this.
 
 A four bits "bitstring".
 
-```Erlang
+```erlang
 10> <<255:2, 0:2>>.
 <<12:4>>
 11> <<0, 255:2, 0:2>>.
@@ -105,7 +104,7 @@ A four bits "bitstring".
 
 Regular Erlang pattern matching also applies to binaries.
 
-```Erlang
+```erlang
 12> <<A:2, B:6>> = <<255>>.
 <<"ÿ">>
 13> A.
@@ -118,7 +117,7 @@ Regular Erlang pattern matching also applies to binaries.
 We can get the remaining part of a binary if we give Erlang a hint
 about what comes next, with the "bitstring" and "binary" modifiers.
 
-```Erlang
+```erlang
 15> <<C:2, Rest1/bitstring>> = <<255>>.
 <<"ÿ">>
 16> C.
@@ -140,7 +139,7 @@ about what comes next, with the "bitstring" and "binary" modifiers.
 
 The "size" value can be a bound variable. Note the base 2 syntax.
 
-```Erlang
+```erlang
 23> N = 5.
 5
 24> <<G:N/bitstring, H/bitstring>> = <<2#111111111111111111:18>>.
@@ -152,7 +151,7 @@ The "size" value can be a bound variable. Note the base 2 syntax.
 
 We also can use Bit Comprehensions.
 
-```Erlang
+```erlang
 26> << <<X>> || <<X:3>> <= <<255>> >>.
 <<7,7>>
 27> << <<X>> || <<X:3>> <= <<205>>, X > 3 >>.
@@ -162,7 +161,7 @@ We also can use Bit Comprehensions.
 
 Some binary related functions.
 
-```Erlang
+```erlang
 28> BinaryFunction = term_to_binary(fun (X) -> X + 1 end).
 <<131,112,0,0,2,187,1,103,57,49,11,11,201,159,65,226,96,
   121,97,18,82,151,208,0,0,0,6,0,0,...>>
@@ -178,7 +177,7 @@ Some binary related functions.
 Finally, a toy example which finds a token and returns the rest of the
 binary.
 
-```Erlang
+```erlang
 -module(binary_test).
 -export([find/2]).
 
@@ -199,7 +198,7 @@ find(Key, Binary) ->
 
 Let's test it.
 
-```Erlang
+```erlang
 32> c(binary_test).
 {ok,binary_test}
 33> binary_test:find(<<"it">>, <<"Does it work?">>).

@@ -44,7 +44,7 @@ iex(2)> quote do: 1 + 1
 {:+, [context: Elixir, import: Kernel], [1, 1]}
 iex(3)>
 ```
-<p>
+
 # Unquote and Backquote
 
 Unquote and backquote (in Emacs Lisp) allow to inject some actual code

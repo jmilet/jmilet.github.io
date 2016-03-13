@@ -42,7 +42,6 @@ We'll write a function which receives the following parameters:
 5. The end callback executed when the last process has finished
 6. The error callback executed for each process ended with errors
 
-<space>
 # The test
 
 The test is quite simple. The input is a text file with some data.
@@ -80,7 +79,7 @@ The final part is just cleaning up the final DOWN messages.
 
 So let's see the code.
 
-```Elixir
+```elixir
 defmodule FileParallel do
 
   # Start processing.
@@ -160,7 +159,7 @@ end
 
 And the test.
 
-```Elixir
+```elixir
 iex(1)> {:ok, file} = File.open "k.txt"
 {:ok, #PID<0.100.0>}
 iex(2)> shell = self()

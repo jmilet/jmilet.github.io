@@ -86,8 +86,6 @@ differ in how it is acomplished.
 	6>
 	```
 
-<br>
-
 # Monitors are unidirectional, stackable, we don't need to ask for notifications and they react on normal and non normal exits
 
 1. Unidirectional
@@ -162,8 +160,6 @@ differ in how it is acomplished.
 	8>
 	```
 
-<br>
-
 # The Erlang functions that manage links and monitors are:
 
 **For links**
@@ -182,8 +178,6 @@ differ in how it is acomplished.
 * spawn_monitor/3
 * demonitor/1
 * demonitor/2
-<br>
-<br>
 
 # Two examples
 
@@ -200,8 +194,6 @@ In the link example the points to note are:
 * We have to _trap exits_ in both processes in order to receive EXIT messages.
 * The structure of the received message is different from the monitor one.
 * Abnormally exiting the monitoring process also exits the monitored one (look for "simple_process got 'EXIT'"). This demonstrates the bidirectionality.
-<br>
-<br>
 
 ```Erlang
 -module(simple_sup_link).
@@ -272,15 +264,13 @@ crash
 Error in process <0.39.0> with exit value: {badarith,[{simple_sup_link,loop,
 0,[{file,"simple_sup_link.erl"},{line,17}]}]}
 ```
-<br>
+
 # The monitor example
 
 In the monitor example the points to note are:
 
 * We display the message we have receive about the monitored process ending.
 * We don't need to do anything in order to get those messages.
-<br>
-<br>
 
 ```Erlang
 -module(simple_sup_monitor).
@@ -337,4 +327,3 @@ Simple process running...<0.44.0>
 That's it.
 
 Have fun.
-

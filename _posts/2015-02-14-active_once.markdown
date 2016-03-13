@@ -77,13 +77,12 @@ Actually, it's quite simple.
 
 **worker_gen**: The socket reader worker.
 
-<br>
 # main_sup - The main supervisor
 
 It uses permanent one\_on\_one restart strategy. It has two children
 which also are supervisors.
 
-```Erlang
+```erlang
 -module(main_sup).
 
 -behaviour(supervisor).
@@ -120,7 +119,7 @@ init([]) ->
 
     {ok, {SupFlags, ChildList}}.
 ```
-<br>
+
 # listener_sup - The accepting connection process's supervisor
 
 It uses permanent one\_on\_one restart strategy. Its children are
@@ -135,7 +134,7 @@ comprehension where each id is created with the build\_label function
 resulting in an id of the form accept\_fsm\_n where n is the process's
 order.
 
-```Erlang
+```erlang
 -module(listener_sup).
 
 -behaviour(supervisor).
@@ -173,7 +172,7 @@ init([]) ->
 build_label(Name, C) ->
     io_lib:format("~s~w", [Name, C]).
 ```
-<br>
+
 # worker_sup - The reader worker's supervisor
 
 It uses temporary simple\_on\_on\_one restart strategy to start
@@ -183,7 +182,7 @@ the new accepted socket is passed in. Also it sets the new children
 process as the controlling process of the socket so it can receive the
 Erlang messages stream.
 
-```Erlang
+```erlang
 -module(worker_sup).
 
 -behaviour(supervisor).
@@ -219,7 +218,7 @@ init([]) ->
 
     {ok, {SupFlags, [AChild]}}.
 ```
-<br>
+
 # accept_fsm - The accepting connection process
 
 This process is implemented as a FSM of just one state, the accept
@@ -228,7 +227,7 @@ it. When a new connection arrives, the process sets the socket as
 active\_once and asks the worker_sup for a new process passing it the
 new accepted socket. Then it returns to the accept state again.
 
-```Erlang
+```erlang
 -module(accept_fsm).
 
 -behaviour(gen_fsm).
@@ -273,7 +272,7 @@ terminate(_Reason, _StateName, _State) ->
 code_change(_OldVsn, StateName, State, _Extra) ->
     {ok, StateName, State}.
 ```
-<br>
+
 # worker_gen - The socket reader worker
 
 It's where the prove of concept sits. It just prints the received data
@@ -287,7 +286,7 @@ gets full.
 Note how the active_once option is set after each read and how the
 packet type is set to line.
 
-```Erlang
+```erlang
 -module(worker_gen).
 
 -behaviour(gen_server).
@@ -332,12 +331,12 @@ terminate(_Reason, ASocket) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 ```
-<br>
+
 # The code working
 
 Let's see how the code works.
 
-```Erlang
+```erlang
 $ erl
 Erlang/OTP 17 [erts-6.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]
@@ -365,7 +364,7 @@ listener_sup:init...
 
 Let's connect a client.
 
-```Erlang
+```erlang
 ...
 accept_fsm:accept...
 listener_sup:start_link...
@@ -379,7 +378,7 @@ accept_fsm:accept...
 
 And write some text from the client.
 
-```Erlang
+```erlang
 accept_fsm:accept...
 listener_sup:start_link...
 listener_sup:init...
@@ -419,7 +418,7 @@ in the buffer.
 After stressing the server a little bit we check that there is no
 process leak.
 
-```Erlang
+```erlang
 3> supervisor:count_children(main_sup).
 [{specs,2},{active,2},{supervisors,2},{workers,0}]
 4> supervisor:count_children(listener_sup).
@@ -441,4 +440,3 @@ love to hear from you.
 That's it.
 
 Have fun.
-

@@ -44,7 +44,7 @@ echo MALLOC=libc >> .make-settings
 ...
 ...
 ```
-<p>
+
 # Starting the server
 
 The server is created as ./src/redis-server.
@@ -90,12 +90,11 @@ OK
 127.0.0.1:6379>
 ```
 
-<p>
 # The Elixir client with "exredis"
 
 For accessing our Redis server we'll use exredis. We'll include the dependency in our mix project.
 
-```Elixir
+```elixir
   defp deps do
     [
 				{:exredis, ">= 0.2.0"}
@@ -154,14 +153,14 @@ We can check the new key/value directly on the server.
 127.0.0.1:6379>
 ```
 
-<p>
+
 # The Java client with "Jedis"
 
 For the Java client we'll use Jedis.
 
 The Maven dependency is:
 
-```XML
+```xml
 <dependency>
     <groupId>redis.clients</groupId>
 	<artifactId>jedis</artifactId>
@@ -173,7 +172,7 @@ The Maven dependency is:
 
 The Java code is the Jedis home page one.
 
-```Java
+```java
 package com.mycompany.app;
 
 import redis.clients.jedis.Jedis;
@@ -182,7 +181,7 @@ import redis.clients.jedis.Jedis;
  * Hello world!
  *
  */
-public class App 
+public class App
 {
     public static void main( String[] args )
     {
@@ -228,7 +227,7 @@ juanmi@jmimac2 ~/test_redis $
 
 And run it.
 
-```Java
+```java
 juanmi@jmimac2 ~/test_redis $ mvn exec:java -Dexec.mainClass="com.mycompany.app.App"
 [INFO] Scanning for projects...
 [INFO]

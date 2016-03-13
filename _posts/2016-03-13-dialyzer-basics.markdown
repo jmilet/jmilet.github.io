@@ -26,7 +26,7 @@ a *thing_id* is expected and the other way around.
 
 This is the example.
 
-```Erlang
+```erlang
 -module(types1).
 -export([foo/0]).
 
@@ -39,7 +39,7 @@ foo() ->
 Looking at the execution we find that 1 and 2 are our id's but it's not easy
 to distinguish each kind of id.
 
-```
+```erlang
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10]
 [hipe] [kernel-poll:false]
@@ -51,13 +51,12 @@ Eshell V7.1  (abort with ^G)
 {1,2}
 ```
 
-<space>
 # Tag the types
 
 We can improve things a little bit by tagging our parameters.
 
 {% raw %}
-```Erlang
+```erlang
 -module(types2).
 -export([foo/0]).
 
@@ -72,7 +71,7 @@ foo() ->
 It works and we get some clue about the type of parameters we are dealing with.
 
 {% raw %}
-```
+```erlang
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10]
 [hipe] [kernel-poll:false]
@@ -90,7 +89,7 @@ This allows us to detect type mismatches at runtime. For example, this is
 the result of crossing both parameters in foo().
 
 {% raw %}
-```Erlang
+```erlang
 -module(types3).
 -export([foo/0]).
 
@@ -105,7 +104,7 @@ foo() ->
 The runtime error.
 
 {% raw %}
-```
+```erlang
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]
@@ -145,12 +144,12 @@ Unknown types:
  done in 0m57.99s
 done (passed successfully)
 ```
-<space>
+
 # Type and function definition
 
 So now we'll define types for our two ids and specs for our two functions.
 
-```Erlang
+```erlang
 -module(types4).
 -export([foo/0]).
 
@@ -170,7 +169,7 @@ foo() ->
 We find nothing new at runtime.
 
 {% raw %}
-```
+```erlang
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10]
 [hipe] [kernel-poll:false]
@@ -186,7 +185,7 @@ Eshell V7.1  (abort with ^G)
 But now, unlike we did before, we are going to cross the returned values, not
 the calling parameters.
 
-```Erlang
+```erlang
 -module(types5).
 -export([foo/0]).
 
@@ -206,7 +205,7 @@ foo() ->
 Obviously, we get the values in the opposite order.
 
 {% raw %}
-```
+```erlang
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]
@@ -248,7 +247,7 @@ done (passed successfully)
 Just one final thing. Let's remove the foo() call on types5.erl and name the
 new file types7.erl. We'll keep the code commented to see the differences.
 
-```Erlang
+```erlang
 -module(types7).
 % -export([foo/0]).
 

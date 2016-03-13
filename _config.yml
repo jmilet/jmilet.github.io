@@ -1,6 +1,6 @@
 name: Fun = fun() -> {programming, erlang, elixir} end.
-markdown: redcarpet
-highlighter: pygments
+markdown: kramdown
+highlighter: rouge
 name: Fun = fun() -> {programming, erlang, elixir} end.
 description: A bog about fun, programming, Erlang and Elixir... an others
 url: http://jmilet.github.io

@@ -90,18 +90,17 @@ Received 2 ...
 Received 3 ...
 (uno@localhost)3>
 ```
-<p>
-#Globally register a name to make it independent of its pid
+
+# Globally register a name to make it independent of its pid
 
 ```Erlang
 start() ->
     global:register_name(?PROCESS_NAME, spawn_link(fun() -> loop() end)).
-    
+
 pid() ->
     global:whereis_name(?PROCESS_NAME).
 ```
 
-<p>
 # Make your how "for" with nice recursion
 
 ```Erlang
@@ -112,8 +111,7 @@ for(I, N, F) ->
     for(I + 1, N, F).
 ```
 
-<p>
-#Cross-VM message passing via API
+# Cross-VM message passing via API
 
 ```Erlang
 run(N) ->
@@ -122,16 +120,14 @@ run(N) ->
     for(1, N, fun(I) -> P ! I end).
 ```
 
-<p>
-#Remote process control
+# Remote process control
 
 ```Erlang
 stop() ->
     exit(pid(), kill).
 ```
 
-<p>
-#Hot code reloading
+# Hot code reloading
 
 In one terminal.
 
