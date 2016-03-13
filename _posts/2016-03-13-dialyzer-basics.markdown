@@ -220,7 +220,7 @@ Eshell V7.1  (abort with ^G)
 {% endraw %}
 
 But, Dialyzer can realize that there exists a type inconsistence between
-the actual return and the function specification.
+the actual return and the function specification before the program is run.
 
 {% raw %}
 ```
@@ -245,8 +245,8 @@ $ dialyzer types4.erl
 done (passed successfully)
 ```
 
-Just one final thing. Let's remove the foo() call on types5.erl and name it
-types7.erl. We'll keep the code commented to see the differences.
+Just one final thing. Let's remove the foo() call on types5.erl and name the
+new file types7.erl. We'll keep the code commented to see the differences.
 
 ```Erlang
 -module(types7).
@@ -277,9 +277,10 @@ done (warnings were emitted)
 ```
 
 Dialyzer warns us about the never called function, but it can't say anything
-about the types, because actually ThindId and UserId are just names bound
-to some data and they have no type information at this point. It's the data
-flow what Dialyzer checks.
+about the types, because *ThindId* and *UserId* actually are just names that
+will be bound to some data, but a this point, Dialyzer doesn't know what its types
+could be. It's the data flow what Dialyzer checks so it needs a data entry point
+to analyze the involved types.
 
 That's it.
 
