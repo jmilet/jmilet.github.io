@@ -32,7 +32,7 @@ Will result in:
 
 As said before, to accomplish this, we'll use pattern matching, recursion
 with folding and unit tests. We'll also take advantage of my new discovery,
-the 'escript' command, so that everything gets documented. 
+the 'escript' command, so that everything gets documented.
 
 Very quickly. We'll use just two files:
 
@@ -65,7 +65,7 @@ process(String) ->
 
 main(_) ->
     Result = process("(a(b(c)b)a)"),
-    
+
     lists:foreach(fun(X) ->
 			 io:format("~p~n", [X])
 		  end,
@@ -83,7 +83,6 @@ prueba0001_test() ->
     ?assert(R5 =:= string:copies(?SPACES, 0) ++ "a").    
 {% endhighlight %}
 
-#
 # Recursion and Folding
 
 This is the main folding function.
@@ -156,7 +155,7 @@ main/1 is the execution entry point to the program when we run it with
 {% highlight erlang %}
 main(_) ->
     Result = process("(a(b(c)b)a)"),
-    
+
     lists:foreach(fun(X) ->
 			  io:format("~p~n", [X])
  		  end,
@@ -243,4 +242,3 @@ export it explicitlly.
 That's it.
 
 Have fun.
-

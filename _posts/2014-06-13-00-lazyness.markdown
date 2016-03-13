@@ -31,7 +31,7 @@ val({Value, _FunctionNext}) ->
 
 Let's see it in action.
 
-{% highlight bash %}
+{% highlight erlang %}
 $ erl
 Erlang/OTP 17 [RELEASE CANDIDATE 2] [erts-6.0] [source] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
@@ -75,7 +75,7 @@ val({Value, _FunctionNext}) ->
 
 And its execution.
 
-{% highlight bash %}
+{% highlight erlang %}
 $ erl
 Erlang/OTP 17 [RELEASE CANDIDATE 2] [erts-6.0] [source] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
@@ -98,4 +98,3 @@ Eshell V6.0  (abort with ^G)
 As its title denotes this post has been quite short.
 
 Have fun.
-

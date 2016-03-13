@@ -27,7 +27,7 @@ internal representation.
 
 In Emacs Lisp:
 
-```Lisp
+```lisp
 (+ 1 1)
 2
 
@@ -37,7 +37,7 @@ In Emacs Lisp:
 
 In Elixir:
 
-```Elixir
+```elixir
 iex(1)> 1 + 1
 2
 iex(2)> quote do: 1 + 1
@@ -54,7 +54,7 @@ Let's see it.
 
 In Lisp:
 
-```Lisp
+```lisp
 (setq x 20)
 20
 
@@ -67,7 +67,7 @@ In Lisp:
 
 In Elixir:
 
-```Elixir
+```elixir
 iex(1)> x = 20
 20
 iex(2)> quote do: 1 + x
@@ -96,7 +96,7 @@ classical exemple is the *unless* language keyword.
 
 In Lisp.
 
-```Lisp
+```lisp
 (defmacro unless(expr code)
   `(if (not ,expr)
        ,code))
@@ -111,7 +111,7 @@ nil
 
 In Elixir:
 
-```Elixir
+```elixir
 iex(1)> defmodule MacroTest do
 ...(1)>    defmacro unless(expr, code) do
 ...(1)>       quote do
@@ -139,7 +139,7 @@ Note that *code* took the value [do: :ok] so that was returned by its
 unquoting inside then quoting.  Let's do it nicer using Keyword Lists
 in order to grab the actual code in the *code* var.
 
-```Elixir
+```elixir
 iex(1)> defmodule MacroTest do
 ...(1)>    defmacro unless(expr, do: code) do
 ...(1)>       quote do

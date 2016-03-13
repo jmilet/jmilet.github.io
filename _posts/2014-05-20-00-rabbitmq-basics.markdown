@@ -8,15 +8,14 @@ categories: erlang rabbitmq
 I should be writing about the second day of the feed's app, but before that
 I would like to document an small proof of concept with RabbitMQ.
 
-RabbitMQ is an amazing messaging system writen in Erlang that you
+RabbitMQ is an amazing messaging system written in Erlang that you
 can access from any language. These are my notes about it. If you
-actually want to learn RabbitMQ, please read RabbitMQ
-in Action.
+actually want to learn RabbitMQ, please read RabbitMQ in Action.
 
 Clearly RabbitMQ it's going to change the way I look at some kind of
 problems.
 
-## Installation
+# Installation
 
 Just go to the RabbitMQ download page and look for the binary tar file.
 
@@ -26,7 +25,7 @@ For example:
 $ tar xvfz rabbitmq-server-generic-unix-3.3.1.tar.gz
 {% endhighlight %}
 
-## Start the system up
+# Start the system up
 
 Starting the server up actually means to start an Erlang node up.
 
@@ -313,4 +312,3 @@ Hopefully in the next few days I will have some spare time to get
 into more detail with an Erlang example.
 
 Have fun.
-

@@ -14,7 +14,7 @@ about and why it's so fun.
 
 Then I came up with this piece of code.
 
-```Erlang
+```erlang
 -module(process_ex).
 
 -export([start/0, run/1, loop/0, pid/0, stop/0]).
@@ -54,7 +54,7 @@ for(I, N, F) ->
 
 Why is it interesting?
 
-#Distributed Erlang
+# Distributed Erlang
 
 In one terminal.
 
@@ -93,7 +93,7 @@ Received 3 ...
 
 # Globally register a name to make it independent of its pid
 
-```Erlang
+```erlang
 start() ->
     global:register_name(?PROCESS_NAME, spawn_link(fun() -> loop() end)).
 
@@ -103,7 +103,7 @@ pid() ->
 
 # Make your how "for" with nice recursion
 
-```Erlang
+```erlang
 for(N, N, F) ->
     F(N);
 for(I, N, F) ->
@@ -113,7 +113,7 @@ for(I, N, F) ->
 
 # Cross-VM message passing via API
 
-```Erlang
+```erlang
 run(N) ->
     P = pid(),
 
@@ -122,7 +122,7 @@ run(N) ->
 
 # Remote process control
 
-```Erlang
+```erlang
 stop() ->
     exit(pid(), kill).
 ```

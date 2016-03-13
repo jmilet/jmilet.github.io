@@ -97,8 +97,8 @@ For accessing our Redis server we'll use exredis. We'll include the dependency i
 ```elixir
   defp deps do
     [
-				{:exredis, ">= 0.2.0"}
-	]
+        {:exredis, ">= 0.2.0"}
+    ]
   end
 ```
 

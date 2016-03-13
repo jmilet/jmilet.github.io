@@ -12,7 +12,7 @@ bit with it and found that it's quite easy to understand and use.
 
 Let's see it in action.
 
-```Erlang
+```erlang
 -module(event1).
 
 -behaviour(gen_event).
@@ -54,7 +54,7 @@ Firstly, we need an event manager. The event manager is just a process
 which has the ability to notify events. Note that to start a manager
 we don't reference our code at all.
 
-```Erlang
+```erlang
 $ erl
 Erlang/OTP 17 [erts-6.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]
@@ -71,7 +71,7 @@ a process which listens to the notifications emitted by the
 manager. It's an actual process with its own state. To see how its
 state evolves we'll print how many times the handler it's been called.
 
-```Erlang
+```erlang
 3> gen_event:add_handler(Manager, event1, []).
 => event1:initok
 4> gen_event:notify(Manager, {uno, 100}).
@@ -88,7 +88,7 @@ ok
 Now we'll instance a second event handler. Note that they are different
 processes with different state.
 
-```Erlang
+```erlang
 7> gen_event:add_handler(Manager, event1, []).
 => event1:initok
 8> gen_event:notify(Manager, {uno, 200}).
@@ -105,14 +105,14 @@ We get two messages because we have two handlers.
 
 Let's list them.
 
-```Erlang
+```erlang
 10> gen_event:which_handlers(Manager).
 [event1,event1]
 ```
 
 Let's remove one of them.
 
-```Erlang
+```erlang
 11> gen_event:delete_handler(Manager, event1, []).
 => event1:terminate
 ok
@@ -123,7 +123,7 @@ ok
 
 And finally, stop the manager.
 
-```Erlang
+```erlang
 13> gen_event:stop(Manager).
 => event1:terminate
 ok
@@ -133,4 +133,3 @@ ok
 That's it.
 
 Have fun.
-

@@ -13,7 +13,7 @@ the system to do the work.
 
 This function...
 
-```Erlang
+```erlang
 file:consult(Filename) -> {ok, Terms} | {error, Reason}
 ```
 
@@ -21,7 +21,7 @@ file:consult(Filename) -> {ok, Terms} | {error, Reason}
 
 An example:
 
-```Erlang
+```erlang
 $ cat readme.txt
 {results,
  {one, 1},
@@ -43,7 +43,7 @@ Eshell V6.1  (abort with ^G)
 
 Also related to this.
 
-```Erlang
+```erlang
 $ erl
 Erlang/OTP 17 [erts-6.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]

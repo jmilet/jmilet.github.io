@@ -23,15 +23,15 @@ In order to implement our prove of concept we'll define a very simple
 FSM.
 
 ```
-	            times = times + 1
-	First state -> Second state -> Third State
-	     ^                            |
-	     |                            |
-	     +----------------------------+
+              times = times + 1
+  First state -> Second state -> Third State
+       ^                            |
+       |                            |
+       +----------------------------+
                        ^
-					   |
-				     reset => times = 0
-					          next state is first_state
+                       |
+              reset => times = 0
+                       next state is first_state
 ```
 
 1. Our FSM is an infinite loop with three states. The FSM will
@@ -102,7 +102,7 @@ place.
 
 The test module's code...
 
-```Erlang
+```erlang
 -module(fsm_test).
 
 -behaviour(gen_fsm).
@@ -194,7 +194,7 @@ code_change(_OldVsn, StateName, State, _Extra) ->
 
 The module working...
 
-```Erlang
+```erlang
 $ erl
 Erlang/OTP 17 [erts-6.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]
@@ -251,4 +251,3 @@ First state...
 That's it.
 
 Have fun.
-

@@ -55,16 +55,16 @@ insert(N) ->
 Let's set up our database cluster. We need to run all three nodes.
 For example, for node 'a'.
 
-{% highlight bash %}
+{% highlight erlang %}
 $ erl -name a@192.168.1.36 -setcookie abc
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Note the node name and the cookie. The cookie must match in all nodes.
 
 Once the three nodes are running let's create the schema and
 start Mnesia at all of them.
 
-{% highlight bash %}
+{% highlight erlang %}
 $ erl -name a@192.168.1.36 -setcookie abc
 Erlang R16B02 (erts-5.10.3) [source-b44b726] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
@@ -81,69 +81,69 @@ Eshell V5.10.3  (abort with ^G)
 (a@192.168.1.36)3> mnesia_test:start().
 ok
 (a@192.168.1.36)4>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Now we have our distributed database up. Let's insert some data.
 
-{% highlight bash %}
+{% highlight erlang %}
 (a@192.168.1.36)4> spawn(fun() -> mnesia_test:insert(10) end).
 <0.153.0>
 (a@192.168.1.36)5>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 We can go to node 'c' and check our new data.
 
-{% highlight bash %}
+{% highlight erlang %}
 (c@192.168.1.102)1> mnesia:dirty_all_keys(friends).
 [1,10,2,3,8,4,5,7,6,9]
 (c@192.168.1.102)2>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 We can return to node 'a' again to insert a process PID in our
 database.
 
-{% highlight bash %}
+{% highlight erlang %}
 (a@192.168.1.36)5> mnesia:dirty_write({friends, 2000, spawn(fun() -> receive A -> io:format("~p~n", [A]) end end)}).
 ok
 (a@192.168.1.36)6> mnesia:dirty_read({friends, 2000}).
 [{friends,2000,<0.162.0>}]
 (a@192.168.1.36)7>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Notice the difference if we read {friends, 2000} from node 'c'.
 
-{% highlight bash %}
+{% highlight erlang %}
 (c@192.168.1.102)2> mnesia:dirty_read({friends, 2000}).
 [{friends,2000,<5981.162.0>}]
 (c@192.168.1.102)3>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Do you see the difference with the PID's first number? Yes, it's the node,
 the second one is the process.
 
 Let's use it from node 'c'.
 
-{% highlight bash %}
+{% highlight erlang %}
 (c@192.168.1.102)3> [{_, _, Process}] = mnesia:dirty_read({friends, 2000}).
 [{friends,2000,<5981.162.0>}]
 (c@192.168.1.102)4> Process ! hola.
 hola
 (c@192.168.1.102)5>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Check the console in node 'a'. It works.
 
 Let's clear the table.
 
-{% highlight bash %}
+{% highlight erlang %}
 (a@192.168.1.36)21> mnesia:clear_table(friends).
 {atomic,ok}
 (a@192.168.1.36)22>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Now, let's shut node 'c' down.
 
-{% highlight bash %}
+{% highlight erlang %}
 (a@192.168.1.36)22> mnesia:info().
 ---> Processes holding locks <---
 ---> Processes waiting for locks <---
@@ -170,21 +170,21 @@ disc_only_copies   = []
 0 transactions waits for other nodes: []
 ok
 (a@192.168.1.36)23>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Note the stopped nodes.
 
 Let's insert 20 rows from node 'a'.
 
-{% highlight bash %}
+{% highlight erlang %}
 (a@192.168.1.36)23> mnesia_test:insert(20).
 ok
 (a@192.168.1.36)24>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 Let's start node 'c' up.
 
-{% highlight bash %}
+{% highlight erlang %}
 $ erl -name c@192.168.1.102 -setcookie abc
 Erlang/OTP 17 [RELEASE CANDIDATE 2] [erts-6.0] [source] [async-threads:10] [kernel-poll:false]
 
@@ -194,9 +194,8 @@ ok
 (c@192.168.1.102)2> length(mnesia:dirty_all_keys(friends)).
 20
 (c@192.168.1.102)3>
-{% endhighlight bash %}
+{% endhighlight erlang %}
 
 The data is there.
 
 Have fun.
-
