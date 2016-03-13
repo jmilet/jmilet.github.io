@@ -37,9 +37,9 @@ foo() ->
   tuplefy(1, 2).
 ```
 Looking at the execution we find that 1 and 2 are our id's but it's not easy
-to know which one is the *user_id* and which one is the *thing_id*.
+to guess which one is the *user_id* and which one is the *thing_id*.
 
-```Erlang
+```
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10]
 [hipe] [kernel-poll:false]
@@ -56,67 +56,78 @@ Eshell V7.1  (abort with ^G)
 
 We can improve things a little bit by tagging our parameters.
 
+{% raw %}
 ```Erlang
 -module(types2).
 -export([foo/0]).
 
 tuplefy({thing_id, ThingId}, {user_id, UserId}) ->
-  {ThingId, UserId}.
+  {{thing_id, ThingId}, {user_id, UserId}}.
 
 foo() ->
   tuplefy({thing_id, 1}, {user_id, 2}).
 ```
-It works and we get some clue about the type of parameters we are passing in.
+{% endraw %}
 
-```Erlang
-$ erl
-Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
-[kernel-poll:false]
+It works and we get some clue about the type of parameters we are dealing with.
 
-Eshell V7.1  (abort with ^G)
-1> c(types2).
-{ok,types2}
-2> types2:foo().
-{1,2}
+{% raw %}
 ```
-
-This allows to detect type mismatches at runtime. For example, this is
-the result of crossing both parameters in foo().
-
-```Erlang
--module(types3).
--export([foo/0]).
-
-tuplefy({thing_id, ThingId}, {user_id, UserId}) ->
-  {ThingId, UserId}.
-
-foo() ->
-  tuplefy({user_id, 2}, {thing_id, 1}).
-```
-
-The runtime error.
-
-```Erlang
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10]
 [hipe] [kernel-poll:false]
 
 Eshell V7.1  (abort with ^G)
+1> c(types2).
+{ok,types2}
+2> types2:foo().
+{{thing_id,1},{user_id,2}}
+3>
+```
+{% endraw %}
+
+This allows to detect type mismatches at runtime. For example, this is
+the result of crossing both parameters in foo().
+
+{% raw %}
+```Erlang
+-module(types3).
+-export([foo/0]).
+
+tuplefy({thing_id, ThingId}, {user_id, UserId}) ->
+  {{thing_id, ThingId}, {user_id, UserId}}.
+
+foo() ->
+  tuplefy({user_id, 2}, {thing_id, 1}). %% <<<<<< Cross parameters
+```
+{% endraw %}
+
+The runtime error.
+
+{% raw %}
+```
+$ erl
+Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
+[kernel-poll:false]
+
+Eshell V7.1  (abort with ^G)
 1> c(types3).
 {ok,types3}
 2> types3:foo().
-** exception error: no function clause matching
-                    types3:tuplefy({user_id,2},{thing_id,1}) (types3.erl, line 4)
+** exception error: no function clause matching types3:tuplefy({user_id,2},
+  {thing_id,1}) (types3.erl, line 4)
+3>
 ```
+{% endraw %}
 
 But we want the catch the error way before execution. Let's begin with
 Dialyzer.
 
 # Building the PLT
 
-Before our final example we'll prepare our Erlang installation to work with
-Dialyzer. In order to work, it needs to build a type's repository which is
-located at $HOME/.dialyzer_plt. This process takes a while, be patient.
+Before our final examples we'll prepare our Erlang installation to work with
+Dialyzer. In order to work, Dialyzer needs to build a type's repository which is
+created at $HOME/.dialyzer_plt. This process takes a while, be patient.
 
 ```
 $ dialyzer --build_plt --apps erts kernel stdlib
@@ -137,10 +148,7 @@ done (passed successfully)
 <space>
 # Type and function definition
 
-So now we'll define types for our two ids and specs for our two functions. Note that
-we have changed the return type of the tuplefy() function from integer to
-*thind_id()* and *user_id()* respectively, in order to have a better example
-to get a type mismatch.
+So now we'll define types for our two ids and specs for our two functions.
 
 ```Erlang
 -module(types4).
@@ -162,7 +170,7 @@ foo() ->
 We find nothing new at runtime.
 
 {% raw %}
-```Erlang
+```
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10]
 [hipe] [kernel-poll:false]
@@ -175,8 +183,8 @@ Eshell V7.1  (abort with ^G)
 ```
 {% endraw %}
 
-But, what would happen if we cross the return parameters in tuplefy as we
-previously did?
+But now, unlike we did before, we are going to cross the returned values, not
+the calling parameters.
 
 ```Erlang
 -module(types5).
@@ -198,7 +206,7 @@ foo() ->
 Obviously, we get the values in the opposite order.
 
 {% raw %}
-```Erlang
+```
 $ erl
 Erlang/OTP 18 [erts-7.1] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe]
 [kernel-poll:false]
@@ -237,7 +245,7 @@ $ dialyzer types4.erl
 done (passed successfully)
 ```
 
-Just one final thing. Let's remove the foo() call to types5.erl and name it
+Just one final thing. Let's remove the foo() call on types5.erl and name it
 types7.erl. We'll keep the code commented to see the differences.
 
 ```Erlang
@@ -257,7 +265,7 @@ tuplefy(ThingId, UserId) ->
 %   tuplefy({thing_id, 1}, {user_id, 2}).
 ```
 
-Let's run dialyzer.
+Let's run dialyzer again.
 
 ```
 $ dialyzer types7.erl
@@ -270,9 +278,11 @@ done (warnings were emitted)
 
 Dialyzer warns us about the never called function, but it can't say anything
 about the types, because actually ThindId and UserId are just names bound
-to some data and have no type information at this point. It's the data
+to some data and they have no type information at this point. It's the data
 flow what dialyzer checks.
 
-That's it. Corrections and improvements are welcome.
+That's it.
+
+Corrections and improvements are welcome.
 
 Have fun.
