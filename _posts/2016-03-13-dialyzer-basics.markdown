@@ -5,7 +5,7 @@ date:   2016-03-13 00:00:00
 categories: Dialyzer elixir erlang
 ---
 
-These are my notes about Dialyzer mean to help me to remember how
+These are my notes about Dialyzer meant to help remember myself how
 it works. You can find a complete definition and instructions here
 [http://erlang.org/doc/man/dialyzer.html](http://erlang.org/doc/man/dialyzer.html).
 
@@ -14,10 +14,10 @@ As usual we'll use a very simple example to build our explanation on.
 # Types
 
 Erlang is a strongly dynamic typed language so type checks are done at runtime.
-Even though this dynamism has several advantages it's convenient to be able to
+Even though its dynamism has several advantages it's convenient to be able to
 check types at compile time. This is where Dialyzer comes in. This tool
 allows us to analyze our code in order to detect type mismatches and other
-kind of problems.
+kind of problems before we run our programs.
 
 Let's write a toy function that receives an *user_id* and a *thing_id* and return
 them as a tuple where the order of the elements is important. Both values are
@@ -37,7 +37,7 @@ foo() ->
   tuplefy(1, 2).
 ```
 Looking at the execution we find that 1 and 2 are our id's but it's not easy
-to guess which one is the *user_id* and which one is the *thing_id*.
+to distinguish each kind of id.
 
 ```
 $ erl
@@ -86,7 +86,7 @@ Eshell V7.1  (abort with ^G)
 ```
 {% endraw %}
 
-This allows to detect type mismatches at runtime. For example, this is
+This allows us to detect type mismatches at runtime. For example, this is
 the result of crossing both parameters in foo().
 
 {% raw %}
@@ -219,7 +219,8 @@ Eshell V7.1  (abort with ^G)
 ```
 {% endraw %}
 
-But, Dialyzer can help us to catch the type mismatch earlier.
+But, Dialyzer can realize that there exists a type inconsistence between
+the actual return and the function specification.
 
 {% raw %}
 ```
@@ -235,8 +236,7 @@ done (warnings were emitted)
 ```
 {% endraw %}
 
-Dialyzer has detected the type inconsistence between the function spec and
-its actual return value. Compare it with a clean analysis.
+Compare it with a clean analysis.
 
 ```
 $ dialyzer types4.erl
@@ -279,7 +279,7 @@ done (warnings were emitted)
 Dialyzer warns us about the never called function, but it can't say anything
 about the types, because actually ThindId and UserId are just names bound
 to some data and they have no type information at this point. It's the data
-flow what dialyzer checks.
+flow what Dialyzer checks.
 
 That's it.
 
