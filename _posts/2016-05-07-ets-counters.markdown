@@ -35,7 +35,7 @@ end
 ```
 
 `update_counter/3` receives a counter, a key and the number
-of times it has to update the counter. It waits a random period of time
+of times it has to update the counter. It waits for a random period of time
 up to a second before the next iteration.
 
 `print_counter` prints the counter's value once per second.
