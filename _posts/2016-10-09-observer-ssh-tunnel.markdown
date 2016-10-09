@@ -129,7 +129,34 @@ iex(dos@127.0.0.1)1> :net_adm.ping :'uno@127.0.0.1'
 iex(dos@127.0.0.1)2>
 ```
 
-Now you can *:start.observer* and select your remote node in the *nodes* menu.
+Now you can *:start.observer* and select your remote node in the *nodes* menu
+or start a remote shell.
+
+```Elixir
+$ iex --name dos@127.0.0.1 --cookie abc
+Erlang/OTP 18 [erts-7.3] [source] [64-bit] [smp:4:4] [async-threads:10]
+[hipe] [kernel-poll:false] [dtrace]
+
+Interactive Elixir (1.2.5) - press Ctrl+C to exit (type h() ENTER for help)
+iex(dos@127.0.0.1)1>
+User switch command
+ --> h
+  c [nn]            - connect to job
+  i [nn]            - interrupt job
+  k [nn]            - kill job
+  j                 - list all jobs
+  s [shell]         - start local shell
+  r [node [shell]]  - start remote shell
+  q                 - quit erlang
+  ? | h             - this message
+ --> r 'uno@127.0.0.1' 'Elixir.IEx'
+ --> j
+   1  {erlang,apply,[#Fun<Elixir.IEx.CLI.1.100888354>,[]]}
+   2* {'uno@127.0.0.1','Elixir.IEx',start,[]}
+ --> c 2
+Interactive Elixir (1.2.5) - press Ctrl+C to exit (type h() ENTER for help)
+iex(uno@127.0.0.1)1>
+```
 
 You will have to type the remote password twice in case you
 don't use ssh keys.
