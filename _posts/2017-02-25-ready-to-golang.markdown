@@ -67,20 +67,20 @@ type pair struct {
 
 func multiplyByTwo(input <-chan int, output chan<- pair) {
 	defer wg.Done()
+	defer close(output)
 
 	for value := range input {
 		output <- pair{value: value, result: value * 2}
 	}
-	close(output)
 }
 
 func multiplyByFour(input <-chan pair, output chan<- pair) {
 	defer wg.Done()
+	defer close(output)
 
 	for value := range input {
 		output <- pair{value: value.value, result: value.result * 4}
 	}
-	close(output)
 }
 
 func logResult(input <-chan pair) {
@@ -140,7 +140,8 @@ Its methods are:
 # The defer keyword
 
 The defer keyword allows to defer a cleaning operation until the end of the current
-function indepently of the exit path. In this case is used to mark the goroutine termination.
+function indepently of the exit path. In this case is used to mark the goroutine termination
+and to close channels.
 
 # Channels
 
