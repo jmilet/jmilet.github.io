@@ -19,7 +19,7 @@ process name. This way it's easy to visualize in observer the processed file.
 We take advantage of the timeout parameter of the return tuple to run the
 sample every 5 seconds.
 
-```erlang
+```python
 # r Scheduler.Watcher
 
 defmodule Scheduler.Watcher do
